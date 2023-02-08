@@ -3,6 +3,7 @@ package routers
 import (
 	"github.com/gin-gonic/gin"
 	"xqj/docs"
+	v2 "xqj/routers/api/v2"
 
 	"net/http"
 	"xqj/middleware/jwt"
@@ -11,11 +12,15 @@ import (
 	"xqj/pkg/upload"
 	"xqj/routers/api"
 
+	"github.com/dchest/captcha"
+
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
 	v1 "xqj/routers/api/v1"
 )
+
+var captchaHandler = captcha.Server(100, 40)
 
 func InitRouter() *gin.Engine {
 	r := gin.New()
@@ -31,6 +36,10 @@ func InitRouter() *gin.Engine {
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
+	r.GET("/captcha/*", api.CreateUser)
+
+	r.GET("/createuser", api.CreateUser)
+	r.GET("/createuser", api.CreateUser)
 	r.GET("/auth", api.GetAuth)
 	//上传图片
 	r.POST("/upload", api.UploadImage)
@@ -46,7 +55,6 @@ func InitRouter() *gin.Engine {
 		apiv1.PUT("/tags/:id", v1.EditTag)
 		//删除指定标签
 		apiv1.DELETE("/tags/:id", v1.DeleteTag)
-
 		//导出标签
 		r.POST("/tags/export", v1.ExportTag)
 		//导入标签
@@ -63,6 +71,23 @@ func InitRouter() *gin.Engine {
 		apiv1.DELETE("/articles/:id", v1.DeleteArticle)
 		//生成二维码
 		apiv1.POST("/articles/poster/generate", v1.GenerateArticlePoster)
+	}
+
+	apiv2 := r.Group("/api/v2")
+	apiv2.Use(jwt.JWT())
+	{
+		//apiv2.GET("/profiles/", v2.GetProfiles)
+		apiv2.POST("/profile/modify", v2.ModifyProfile)
+
+		//更新相亲对象信息
+		apiv2.POST("/profile/add", v2.AddProfile)
+
+		//获取所有相亲对象列表信息
+		apiv2.GET("/profile/getall", v2.GetProfiles)
+
+		//根据地区获取所有相亲对象列表信息
+		apiv2.GET("/profile/getbycity", v2.GetProfiles)
+
 	}
 
 	return r

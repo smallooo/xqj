@@ -11,7 +11,7 @@ import (
 	"xqj/pkg/export"
 	"xqj/pkg/logging"
 	"xqj/pkg/setting"
-	"xqj/util"
+	"xqj/utils"
 
 	"xqj/service/tag_service"
 )
@@ -35,7 +35,7 @@ func GetTags(c *gin.Context) {
 
 	code := e.SUCCESS
 
-	data["lists"], _ = models.GetTags(util.GetPage(c), setting.AppSetting.PageSize, maps)
+	data["lists"], _ = models.GetTags(utils.GetPage(c), setting.AppSetting.PageSize, maps)
 	data["total"] = models.GetTagTotal(maps)
 
 	c.JSON(http.StatusOK, gin.H{

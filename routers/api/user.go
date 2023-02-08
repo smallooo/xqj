@@ -8,11 +8,13 @@ import (
 	"xqj/pkg/e"
 	"xqj/pkg/logging"
 	"xqj/pkg/util"
+	"xqj/utils"
 )
 
-type auth struct {
+type authAccount struct {
 	Username string `valid:"Required; MaxSize(50)"`
 	Password string `valid:"Required; MaxSize(50)"`
+	PhoneNo  string `valid:"Required; MaxSize(50)"`
 }
 
 // login
@@ -23,13 +25,17 @@ type auth struct {
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
 // @Router /auth [get]
-func GetAuth(c *gin.Context) {
+func CreateUser(c *gin.Context) {
+	phoneno := c.Query("phoneno")
 	username := c.Query("username")
 	password := c.Query("password")
 
 	valid := validation.Validation{}
-	a := auth{Username: username, Password: password}
+	a := authAccount{Username: username, Password: password, PhoneNo: phoneno}
 	ok, _ := valid.Valid(&a)
+	if ok {
+		ok = utils.VerifyMobileFormat(phoneno)
+	}
 
 	data := make(map[string]interface{})
 	code := e.INVALID_PARAMS

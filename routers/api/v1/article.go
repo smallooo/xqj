@@ -10,7 +10,7 @@ import (
 	"xqj/pkg/qrcode"
 	"xqj/pkg/setting"
 	"xqj/service/article_service"
-	"xqj/util"
+	"xqj/utils"
 
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
@@ -90,7 +90,7 @@ func GetArticles(c *gin.Context) {
 	if !valid.HasErrors() {
 		code = e.SUCCESS
 
-		data["lists"] = models.GetArticles(util.GetPage(c), setting.AppSetting.PageSize, maps)
+		data["lists"] = models.GetArticles(utils.GetPage(c), setting.AppSetting.PageSize, maps)
 		data["total"] = models.GetArticleTotal(maps)
 
 	} else {

@@ -14,8 +14,8 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 
 CREATE TABLE IF NOT EXISTS `xqj_profile` (
-    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-    `tag_id` int(10) unsigned DEFAULT '0' COMMENT '标签ID',
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `profile_id` int(11) unsigned DEFAULT '0' COMMENT '对象ID',
     `title` varchar(18) DEFAULT '' COMMENT '标题',
     `desc` varchar(255) DEFAULT '' COMMENT '简述',
     `content` text COMMENT '内容',
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `xqj_auth` (
 -- ----------------------------
 -- Table structure for user_login
 -- ----------------------------
-CREATE TABLE IF NOT EXISTS `user_login` (
+CREATE TABLE IF NOT EXISTS `xqj_login` (
                                             `uid` int unsigned NOT NULL,
                                             `email` varchar(128) NOT NULL DEFAULT '',
     `username` varchar(20) NOT NULL COMMENT '用户名',
@@ -74,10 +74,6 @@ CREATE TABLE IF NOT EXISTS `xqj_tag` (
     `state` tinyint(3) unsigned DEFAULT '1' COMMENT '状态 0为禁用、1为启用',
     PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文章标签管理';
-
-
-
-
 
 -- ----------------------------
 -- Table structure for user_info
