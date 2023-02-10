@@ -39,6 +39,64 @@ func GetProfiles(c *gin.Context) {
 	})
 }
 
+// 获取当前城市下的相亲对象
+func GetProfilesByCity(c *gin.Context) {
+	areaCode := c.Query("areaCode")
+
+	maps := make(map[string]interface{})
+	data := make(map[string]interface{})
+
+	if areaCode != "" {
+		maps["name"] = areaCode
+	}
+
+	var state int = -1
+	if arg := c.Query("state"); arg != "" {
+		state = com.StrTo(arg).MustInt()
+		maps["state"] = state
+	}
+
+	code := e.SUCCESS
+
+	data["lists"], _ = models.GetProfiles(utils.GetPage(c), setting.AppSetting.PageSize, maps)
+	data["total"] = models.GetTagTotal(maps)
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": code,
+		"msg":  e.GetMsg(code),
+		"data": data,
+	})
+}
+
+// 获取当前账号下的相亲列表
+func GetProfilesCreated(c *gin.Context) {
+	areaCode := c.Query("areaCode")
+
+	maps := make(map[string]interface{})
+	data := make(map[string]interface{})
+
+	if areaCode != "" {
+		maps["name"] = areaCode
+	}
+
+	var state int = -1
+	if arg := c.Query("state"); arg != "" {
+		state = com.StrTo(arg).MustInt()
+		maps["state"] = state
+	}
+
+	code := e.SUCCESS
+
+	data["lists"], _ = models.GetProfiles(utils.GetPage(c), setting.AppSetting.PageSize, maps)
+	data["total"] = models.GetTagTotal(maps)
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": code,
+		"msg":  e.GetMsg(code),
+		"data": data,
+	})
+}
+
 // 添加相亲对象信息
 func AddProfile(c *gin.Context) {
 	title := c.Query("title")

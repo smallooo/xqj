@@ -23,6 +23,10 @@ func main() {
 	gredis.Setup()
 	util.Setup()
 
+	////start service
+	//captchaRepo := captcha.NewCaptchaRepo(dataData)
+	//captchaService := action.NewCaptchaService(captchaRepo)
+
 	go app.RunTask()
 
 	gin.SetMode(setting.ServerSetting.RunMode)

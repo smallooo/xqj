@@ -36,11 +36,18 @@ func InitRouter() *gin.Engine {
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
-	r.GET("/captcha/*", api.CreateUser)
+	//创建账号
+	r.GET("/createuser", api.CreateUser)
 
-	r.GET("/createuser", api.CreateUser)
-	r.GET("/createuser", api.CreateUser)
+	//获取图形验证码
+	r.GET("/user/register/captcha", api.GenerateCaptchaHandler)
+
+	//发送短信验证码
+	r.GET("/user/requestmsg", api.SendTextMessage)
+
+	//user login
 	r.GET("/auth", api.GetAuth)
+
 	//上传图片
 	r.POST("/upload", api.UploadImage)
 
@@ -76,17 +83,26 @@ func InitRouter() *gin.Engine {
 	apiv2 := r.Group("/api/v2")
 	apiv2.Use(jwt.JWT())
 	{
-		//apiv2.GET("/profiles/", v2.GetProfiles)
-		apiv2.POST("/profile/modify", v2.ModifyProfile)
-
 		//更新相亲对象信息
 		apiv2.POST("/profile/add", v2.AddProfile)
+
+		//更新相亲对象信息
+		apiv2.POST("/profile/modify", v2.ModifyProfile)
 
 		//获取所有相亲对象列表信息
 		apiv2.GET("/profile/getall", v2.GetProfiles)
 
 		//根据地区获取所有相亲对象列表信息
-		apiv2.GET("/profile/getbycity", v2.GetProfiles)
+		apiv2.GET("/profile/getbycity", v2.GetProfilesByCity)
+
+		//获取当前账号下的相亲列表
+		apiv2.GET("/profile/getbyaccount", v2.GetProfilesCreated)
+
+		//获取浏览记录
+		apiv2.GET("/profile/getbyaccount", v2.GetProfiles)
+
+		//获取关注列表
+		apiv2.GET("/profile/getbyaccount", v2.GetProfiles)
 
 	}
 
